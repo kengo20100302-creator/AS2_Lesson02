@@ -20,6 +20,8 @@ public class NewMonoBehaviourScript : MonoBehaviour
     void Update()
     {
         shot();
+        float zSpeed = 5 * Time.deltaTime;
+        transform.Translate(0, 0, zSpeed);
     }
     //PlayerInputから[Move]アクションを呼び出すメソッド
     public void OnMove(InputValue value)
