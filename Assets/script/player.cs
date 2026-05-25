@@ -4,11 +4,18 @@ using UnityEngine.InputSystem;
 public class NewMonoBehaviourScript : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [Header(" * * * 移動値の設定")]
+    private Vector3 inputMoveVelocity;
 
     [Header("** Shot Settings **")]
     public Transform shotPoint;  //撃ちだし座標
     public GameObject bulletPrefab;
 
+    [Header(" * * * 回転軸の設定")]
+    public GameObject lookAxis;  //向きベクトル軸(オブジェクト)
+    public GameObject gyroAxis;  //ジャイロベクトル軸(オブジェクト)
+    private Vector3 loolAngls;
+    private float gyroAngls;
 
 
     void Start()
@@ -19,9 +26,25 @@ public class NewMonoBehaviourScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        shot();
         float zSpeed = 5 * Time.deltaTime;
         transform.Translate(0, 0, zSpeed);
+        //移動する方向に回転
+        loolAngls.x += inputMoveVelocity.y;
+        loolAngls.y += inputMoveVelocity.x;
+
+        loolAngls.x = Mathf.Clamp(loolAngls.x, -15,15);
+        loolAngls.y = Mathf.Clamp(loolAngls.y, -15,15);
+        gyroAngls = Mathf.Clamp(gyroAngls, -15,15);
+
+        //角度の代入
+        lookAxis.transform.eulerAngles = loolAngls;
+        gyroAxis.transform.eulerAngles = new Vector3(0, 0, gyroAngls);
+
+        loolAngls = Vector3.Lerp(loolAngls, Vector3.zero, Time.deltaTime);
+        gyroAngls = Mathf.Lerp(gyroAngls, 0, Time.deltaTime);
+        
+
+
     }
     //PlayerInputから[Move]アクションを呼び出すメソッド
     public void OnMove(InputValue value)
@@ -43,6 +66,10 @@ public class NewMonoBehaviourScript : MonoBehaviour
         move.x = Mathf.Round(move.x);
         move.y = Mathf.Round(move.y);
         transform.Translate(move);
+
+        inputMoveVelocity = move;
+
+        Debug.Log(inputMoveVelocity);
     }
     //PlayerInputから[]アクションを呼び出すメソッド
     public void OnAttack(InputValue value)
@@ -52,13 +79,15 @@ public class NewMonoBehaviourScript : MonoBehaviour
         Vector3 position = shotPoint.position;
         Quaternion rotation = shotPoint.rotation;
 
-        GameObject bullet = Instantiate(origin, position, rotation);
+        shot();
+
+        //GameObject bullet = Instantiate(origin, position, rotation);
 
         //弾丸を飛ばす
-        Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        rb.AddForce(shotPoint.forward * 50, ForceMode.Impulse);
+        //Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        //rb.AddForce(shotPoint.forward * 50, ForceMode.Impulse);
 
-        Destroy(bullet, 3f);
+        //Destroy(bullet, 3f);
     }
     void shot()
     {
@@ -70,7 +99,7 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
         //弾丸を飛ばす
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        rb.AddForce(shotPoint.forward * 50, ForceMode.Impulse);
+        rb.AddForce(Vector3.forward * 50, ForceMode.Impulse);
 
         Destroy(bullet, 3f);
     }
