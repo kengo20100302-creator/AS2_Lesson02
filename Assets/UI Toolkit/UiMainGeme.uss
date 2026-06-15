@@ -1,0 +1,27 @@
+:root {
+	
+}
+
+.nuity-label {
+	opacity:1;
+	color: black;
+}
+
+#root-container {
+    flex-direction: row
+}
+
+#score-container {
+	opacity:1;
+	background-color:red;
+}
+
+#option-container {
+	opacity: 1;
+	flex-direction:row-reverse;
+}
+
+#game-quit-button {
+	width: 100px;
+	height: 100px;
+}
