@@ -11,10 +11,7 @@
     flex-direction: row
 }
 
-#score-container {
-	opacity:1;
-	background-color:red;
-}
+
 
 #option-container {
 	opacity: 1;
