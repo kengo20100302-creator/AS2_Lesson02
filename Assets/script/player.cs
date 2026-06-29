@@ -11,6 +11,8 @@ public class NewMonoBehaviourScript : MonoBehaviour
     [Header("** Shot Settings **")]
     public Transform shotPoint;  //撃ちだし座標
     public GameObject bulletPrefab;
+    public GameObject shotEffectPrefab; // 発射エフェクト
+    public float effectLifeTime = 2f;   // エフェクトの表示時間
 
     [Header(" * * * 回転軸の設定")]
     public GameObject lookAxis;  //向きベクトル軸(オブジェクト)
@@ -84,6 +86,9 @@ public class NewMonoBehaviourScript : MonoBehaviour
         GameObject origin = bulletPrefab;
         Vector3 position = shotPoint.position;
         Quaternion rotation = shotPoint.rotation;
+        GameObject effect = Instantiate(shotEffectPrefab, shotPoint.position, shotPoint.rotation);
+        Destroy(effect, effectLifeTime);
+
 
         shot();
 
